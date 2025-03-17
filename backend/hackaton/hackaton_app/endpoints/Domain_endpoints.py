@@ -15,6 +15,8 @@ class DomainListView(APIView):
 
 class DomainCreateView(APIView):
     def post(self, request):
+        if Domain.objects.filter(name=request.data["name"]).exists():
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer = DomainSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
