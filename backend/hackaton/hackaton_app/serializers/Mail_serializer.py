@@ -14,7 +14,6 @@ class MailSerializer(serializers.ModelSerializer):
             sender=validated_data["sender"],
             receiver=validated_data["receiver"],
             title=validated_data["title"],
-            is_quarantined=validated_data["is_quarantined"],
         )
         mail.save()
         return mail

@@ -34,3 +34,26 @@ class MailDeleteView(APIView):
         mail = get_object_or_404(Mail, id=id)
         mail.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class MailQuarantineView(APIView):
+    def get(self, request):
+        mails = Mail.objects.filter(is_quarantined=True)
+        serializer = MailSerializer(mails, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class MailAddToQuarantineView(APIView):
+    def patch(self, request, id):
+        mail = get_object_or_404(Mail, id=id)
+        mail.is_quarantined = True
+        mail.save()
+        return Response(status=status.HTTP_200_OK)
+
+
+class MailRemoveFromQuarantineView(APIView):
+    def patch(self, request, id):
+        mail = get_object_or_404(Mail, id=id)
+        mail.is_quarantined = False
+        mail.save()
+        return Response(status=status.HTTP_200_OK)
