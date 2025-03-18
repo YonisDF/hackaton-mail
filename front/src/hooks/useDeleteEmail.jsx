@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import API_URL from "../config/api";
 
 const useDeleteEmail = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -10,8 +11,10 @@ const useDeleteEmail = () => {
         setError(null);
 
         try {
-            const response = await axios.patch(`http://127.0.0.1:8000/api/mail/delete/${id}`);
-            return response.data;
+            const response = await axios.delete(`${API_URL}/api/mail/delete/${id}`);
+            if (response.status === 200) {
+                return true; 
+            }
         } catch (err) {
             setError(err);
             console.error("Failed to delete email:", err);

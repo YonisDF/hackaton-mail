@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
+import 'react-dom'
 import Welcome from './pages/Welcome'
 import Header from './components/Header'
 import Blacklist from './pages/Blacklist'

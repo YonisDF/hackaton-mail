@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_URL from '../config/api';
 
 const useGetBlacklistedDomains = () => {
     const [blacklistedDomains, setBlacklistedDomains] = useState([]);
@@ -9,8 +10,15 @@ const useGetBlacklistedDomains = () => {
     useEffect(() => {
         const fetchBlacklistedDomains = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/domain/blacklist/list'); 
-                setBlacklistedDomains(response.data);
+                const response = await axios.get(`${API_URL}/api/domain/blacklist/list`); 
+                console.log("API Response:", response.data); 
+                
+                if (Array.isArray(response.data)) {
+                    setBlacklistedDomains(response.data);
+                } else {
+                    setBlacklistedDomains([response.data]); 
+                }
+
             } catch (err) {
                 setError(err);
             } finally {

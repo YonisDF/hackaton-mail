@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import API_URL from "../config/api";
 
 const useDeleteWhitelistDomain = () => {
     const [loading, setLoading] = useState(false);
@@ -13,7 +14,7 @@ const useDeleteWhitelistDomain = () => {
 
         try {
             // Remove the domain from the whitelist
-            const response = await axios.patch("http://127.0.0.1:8000/api/domain/whitelist/delete", { domain });
+            const response = await axios.patch(`${API_URL}/api/domain/whitelist/delete/`, { name: domain  });
             if (response.status === 200) {
                 setSuccess(true);
             }

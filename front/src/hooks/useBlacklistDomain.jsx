@@ -1,5 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
+import API_URL from "../config/api";
+
 
 const usePostBlacklistDomain = () => {
     const [loading, setLoading] = useState(false);
@@ -14,10 +16,12 @@ const usePostBlacklistDomain = () => {
         try {
             try {
                 // Step 1: Create the domain
-                const createResponse = await axios.post("http://127.0.0.1:8000/api/domain/create/", { domain });
+                const createResponse = await axios.post(`${API_URL}/api/domain/create/`, { name: domain });
+
                 if (createResponse.status === 201) {
                     // Step 2: Add the domain to the blacklist
-                    const blacklistResponse = await axios.patch("http://127.0.0.1:8000/api/domain/blacklist/add", { domain });
+                    const blacklistResponse = await axios.patch(`${API_URL}/api/domain/blacklist/add/`, { name : domain });
+
                     if (blacklistResponse.status === 200) {
                         setSuccess(true);
                     }
@@ -25,12 +29,13 @@ const usePostBlacklistDomain = () => {
             } catch (createError) {
                 if (createError.response?.status === 400) {
                     // If the domain already exists, directly add it to the blacklist
-                    const blacklistResponse = await axios.patch("http://127.0.0.1:8000/api/domain/blacklist/add", { domain });
+                    const blacklistResponse = await axios.patch(`${API_URL}/api/domain/blacklist/add/`, { name: domain });
+
                     if (blacklistResponse.status === 200) {
                         setSuccess(true);
                     }
                 } else {
-                    throw createError; // Re-throw the error if it's not a "domain already exists" error
+                    throw createError;
                 }
             }
         } catch (err) {

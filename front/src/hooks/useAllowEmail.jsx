@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import API_URL from '../config/api';
 
 const usePutAllowEmail = () => {
     const [loading, setLoading] = useState(false);
@@ -12,7 +13,7 @@ const usePutAllowEmail = () => {
         setSuccess(false);
 
         try {
-            const response = await axios.patch(`http://127.0.0.1:8000/api/mail/quarantine/delete/${id}`);
+            const response = await axios.patch(`${API_URL}/api/mail/quarantine/delete/${emailId}`);
             if (response.status === 200) {
                 setSuccess(true);
             }

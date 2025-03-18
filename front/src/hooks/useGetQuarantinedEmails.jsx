@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_URL from '../config/api';
 
 const useGetQuarantinedEmails = () => {
     const [quarantinedEmails, setQuarantinedEmails] = useState([]);
@@ -9,7 +10,7 @@ const useGetQuarantinedEmails = () => {
     useEffect(() => {
         const fetchQuarantinedEmails = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/mail/quarantine/list');
+                const response = await axios.get(`${API_URL}/api/mail/quarantine/list`);
                 setQuarantinedEmails(response.data);
             } catch (err) {
                 setError(err);

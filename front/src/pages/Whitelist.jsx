@@ -1,76 +1,55 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import useGetWhitelistedDomains from '../hooks/useGetWhitelistedDomains';
+import useDeleteWhitelistDomain from '../hooks/useDeleteWhitelistDomain';
 import DisplayDomains from '../components/DisplayDomains';
 import Header from '../components/Header';
 import AddToWhitelist from '../components/AddToWhitelist';
 
 const Whitelist = () => {
-    const { whitelisteddomains, isLoading, error } = useGetWhitelistedDomains();
-    const handleAddToWhitelist = () => {
-        const addToWhitelistContainer = document.createElement('div');
-        document.body.appendChild(addToWhitelistContainer);
+    const { whitelisteddomains, loading, error } = useGetWhitelistedDomains();
+    const { deleteWhitelistDomain } = useDeleteWhitelistDomain();
+    const [domains, setDomains] = useState([]);
+    const [showModal, setShowModal] = useState(false); 
 
-        const closeModal = () => {
-            document.body.removeChild(addToWhitelistContainer);
-        };
+    useEffect(() => {
+        setDomains(whitelisteddomains);
+    }, [whitelisteddomains]);
 
-        const AddToWhitelistModal = () => (
-            <div style={{
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                backgroundColor: 'white',
-                padding: '20px',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                zIndex: 1000
-            }}>
-                <AddToWhitelist />
-                <button onClick={closeModal} style={{ marginTop: '10px' }}>Close</button>
-            </div>
-        );
-
-        ReactDOM.render(<AddToWhitelistModal />, addToWhitelistContainer);
+    const handleDeleteDomain = async (domain) => {
+        await deleteWhitelistDomain(domain);
+        setDomains(domains.filter(d => d.name !== domain)); // Update UI immediately
     };
-
-    if (isLoading) {
-        return (
-            <main>
-                <Header />
-                <p>Loading...</p>
-            </main>
-        );
-    }
-
-    if (error) {
-        return (
-            <main>
-                <Header />
-                <p>Error: {error.message}</p>
-            </main>
-        );
-    }
-
-    if (!Array.isArray(whitelisteddomains) || whitelisteddomains.length === 0) {
-        return (
-            <main>
-                <Header />
-                <button onClick={handleAddToWhitelist} style={{ position: 'absolute', top: '10px', left: '10px' }}>
-                    Add to Whitelist
-                </button>
-                <p>Aucun domaine</p>
-            </main>
-        );
-    }
 
     return (
         <main>
             <Header />
-            <button onClick={handleAddToWhitelist} style={{ position: 'absolute', top: '10px', left: '10px' }}>
-                Add to Whitelist
-            </button>
             <h1>Whitelisted Domains</h1>
-            <DisplayDomains domains={whitelisteddomains} />
+            {domains.length > 0 ? (
+                <DisplayDomains domains={domains} deleteDomain={handleDeleteDomain} />
+            ) : (
+                <p>No whitelisted domains.</p>
+            )}
+
+            
+            {showModal && (
+                <div style={{
+                    position: 'fixed',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    backgroundColor: 'white',
+                    padding: '20px',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                    zIndex: 1000
+                }}>
+                    <AddToWhitelist />
+                    <button onClick={() => setShowModal(false)} style={{ marginTop: '10px' }}>Close</button>
+                </div>
+            )}
+
+            <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                <button onClick={() => setShowModal(true)}>Add to Whitelist</button>
+            </div>
         </main>
     );
 };

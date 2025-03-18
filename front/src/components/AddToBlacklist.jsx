@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import useWhitelistDomain from '../hooks/useWhitelistDomain';
+import usePostBlacklistDomain from '../hooks/useBlacklistDomain';
 
-const AddToWhitelist = () => {
+const AddToBlacklist = () => {
     const [domain, setDomain] = useState('');
-    const { WhitelistDomain, loading, error, success } = useWhitelistDomain();
+    const { postBlacklistDomain, loading, error, success } = usePostBlacklistDomain();
 
     const handleAddDomain = async () => {
         if (domain.trim()) {
-            await WhitelistDomain(domain);
+            await postBlacklistDomain(domain);
             setDomain('');
         } else {
             alert('Please enter a valid domain.');
@@ -16,15 +16,16 @@ const AddToWhitelist = () => {
 
     return (
         <div>
+            <h2>Add to Blacklist</h2>
             <input
                 type="text"
-                placeholder="Enter domain to whitelist"
+                placeholder="Enter domain to blacklist"
                 value={domain}
                 onChange={(e) => setDomain(e.target.value)}
                 disabled={loading}
             />
             <button onClick={handleAddDomain} disabled={loading}>
-                {loading ? "Adding..." : "Add to Whitelist"}
+                {loading ? "Adding..." : "Add to Blacklist"}
             </button>
 
             {error && <p style={{ color: 'red' }}>Error: {error}</p>}
@@ -33,4 +34,4 @@ const AddToWhitelist = () => {
     );
 };
 
-export default AddToWhitelist;
+export default AddToBlacklist;
