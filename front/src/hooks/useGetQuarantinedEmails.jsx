@@ -9,7 +9,7 @@ const useGetQuarantinedEmails = () => {
     useEffect(() => {
         const fetchQuarantinedEmails = async () => {
             try {
-                const response = await axios.get('/api/quarantined-emails');
+                const response = await axios.get('http://127.0.0.1:8000/api/mail/quarantine/list');
                 setQuarantinedEmails(response.data);
             } catch (err) {
                 setError(err);

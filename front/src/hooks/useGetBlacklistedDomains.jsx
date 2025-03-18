@@ -9,7 +9,7 @@ const useGetBlacklistedDomains = () => {
     useEffect(() => {
         const fetchBlacklistedDomains = async () => {
             try {
-                const response = await axios.get('/api/blacklisted-domains'); // Replace with your API endpoint
+                const response = await axios.get('http://127.0.0.1:8000/api/domain/blacklist/list'); 
                 setBlacklistedDomains(response.data);
             } catch (err) {
                 setError(err);

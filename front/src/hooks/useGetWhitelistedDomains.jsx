@@ -9,7 +9,10 @@ const useGetWhitelistedDomains = () => {
     useEffect(() => {
         const fetchDomains = async () => {
             try {
-                const response = await axios.get('/api/whitelisted-domains');
+                const response = await axios.get('http://127.0.0.1:8000/api/domain/whitelist/list', {
+                    
+                    mode: 'cors',
+                });
                 setDomains(response.data);
             } catch (err) {
                 setError(err);
