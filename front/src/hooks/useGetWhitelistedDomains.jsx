@@ -10,7 +10,7 @@ const useGetWhitelistedDomains = () => {
     useEffect(() => {
         const fetchDomains = async () => {
             try {
-                const response = await axios.get(`${API_URL}/api/domain/whitelist/list`, {
+                const response = await axios.get(`${API_URL}/api/domain/whitelist/list/`, {
                     
                     
                 });
